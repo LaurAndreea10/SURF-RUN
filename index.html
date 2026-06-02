@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🌊🏄🌊 SURF RUN</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<canvas id="sky-c"></canvas>
+<div class="sun-halo"></div>
+<div class="sea" id="sea"><div class="reflect"></div></div>
+<canvas id="spray"></canvas>
+<canvas id="splash"></canvas>
+<canvas id="screen-drops"></canvas>
+<div id="wet"></div>
+<div id="slowmo-ov"></div>
+<div id="flash"></div>
+
+<div id="hud">
+  <div class="hb"><span class="hl">Score</span><span class="hv" id="score-val">0</span></div>
+  <div class="hb"><span class="hl">Multiplier</span><span class="hv" id="multi-val">×1</span></div>
+  <div class="hb"><span class="hl">Lives</span><span class="hv" id="lives-val">🤙🤙🤙</span></div>
+</div>
+<div id="boost-hud"></div>
+<div id="mode-badge">MODE <strong id="mode-name">CLASSIC</strong></div>
+<div id="spd-badge">▶ SPD <span id="spd-n">1.0</span></div>
+<div id="ctrl-hint">← jump · → duck</div>
+<div id="daily-badge">📅 DAILY</div>
+<div id="boss-hud">🌊 BIG WAVE · <span id="boss-time">10</span>s</div>
+<div id="weather-hud">🌧️ WEATHER</div>
+<button id="pause-btn" aria-label="Pause game">Ⅱ</button>
+<div id="cinematic"><div><div class="big">🌊💥</div><div class="txt">slow motion wipeout</div></div></div>
+<div id="missions-hud" class="mini-panel offscreen"><div class="panel-title">Missions</div><div id="missions-live"></div></div>
+
+<!-- THE STARTER -->
+<p id="player"><span id="em-L">🌊</span><span id="em-S">🏄</span><span id="em-R">🌊</span></p>
+
+<!-- START -->
+<div class="screen" id="start-screen">
+  <div class="se">🌊🏄🌊</div>
+  <h2>SURF RUN</h2>
+  <div class="ss">SPACE / CLICK → jump (2×) &nbsp;·&nbsp; ↓ S / right tap → duck</div>
+  <div class="ss">dodge obstacles · collect 🪙💎 · grab power-ups 🌟🐬❤️</div>
+  <div class="mode-grid" id="mode-grid" aria-label="Game modes">
+    <button class="mode-card active" data-mode="classic"><span class="mode-e">🏄</span><span class="mode-n">Classic</span><span class="mode-d">balanced surf run</span></button>
+    <button class="mode-card" data-mode="zen"><span class="mode-e">🌴</span><span class="mode-n">Zen</span><span class="mode-d">slower, easier, 5 lives</span></button>
+    <button class="mode-card" data-mode="rush"><span class="mode-e">⚡</span><span class="mode-n">Rush</span><span class="mode-d">fast waves, high risk</span></button>
+    <button class="mode-card" data-mode="treasure"><span class="mode-e">💎</span><span class="mode-n">Treasure</span><span class="mode-d">more coins and gems</span></button>
+    <button class="mode-card" id="daily-card" data-daily-card="1"><span class="mode-e">📅</span><span class="mode-n">Daily</span><span class="mode-d">same seed · rush rules</span></button>
+  </div>
+  <div class="start-panels">
+    <div class="mini-panel"><div class="panel-title">Progress</div><div id="progress-panel"></div></div>
+    <div class="mini-panel"><div class="panel-title">World Map</div><div id="map-panel"></div></div>
+    <div class="mini-panel"><div class="panel-title">Daily Reward</div><div id="daily-panel"></div></div>
+    <div class="mini-panel"><div class="panel-title">Today Missions</div><div id="missions-panel"></div></div>
+  </div>
+  <div class="btns">
+    <button class="btn" id="start-btn">PADDLE OUT</button>
+    <button class="btn btn-alt" id="daily-btn">📅 DAILY CHALLENGE</button>
+    <button class="btn btn-alt" id="shop-btn">🪙 SHOP</button>
+    <button class="btn btn-alt" id="settings-btn">⚙ SETTINGS</button>
+    <button class="btn btn-alt" id="tutorial-btn">? TUTORIAL</button>
+    <button class="btn btn-alt" id="ach-btn">🏆 ACHIEVEMENTS</button>
+  </div>
+  <div id="start-lb"></div>
+</div>
+
+<!-- GAME OVER -->
+<div class="screen off" id="over-screen">
+  <div class="se" id="wipe-e">🌊💥🏄</div>
+  <h2>WIPEOUT!</h2>
+  <div class="sbs">Score: <strong id="final-s">0</strong></div>
+  <div id="rank-line">ROOKIE SURFER</div>
+  <div class="sbs" id="xp-line">XP +0 · Level 1</div>
+  <div class="sbs" id="trick-line">Tricks: 0 · Near Miss: 0</div>
+  <div id="map-over"></div>
+  <div id="leaderboard"></div>
+  <div class="new-rec off" id="new-rec">🏆 NEW RECORD</div>
+  <div id="ach-list"></div>
+  <div class="btns">
+    <button class="btn" id="retry-btn">BACK ON THE BOARD</button>
+    <button class="btn btn-alt" id="daily-retry">📅 DAILY</button>
+    <button class="btn btn-alt" id="over-ach-btn">🏆 ACHIEVEMENTS</button>
+  </div>
+</div>
+
+
+<div class="modal" id="tutorial-modal">
+  <div class="modal-card">
+    <h3>Surf Tutorial</h3>
+    <p><strong>Tap left / Space</strong> = jump. Tap twice for double jump. <strong>Tap right / ↓</strong> = duck.</p>
+    <ul>
+      <li>Dodge ground obstacles like 🪨 🦈 🪸.</li>
+      <li>Duck under aerial obstacles like 🦅 and 🛸.</li>
+      <li>Collect 🪙 and 💎, then unlock skins and themes in Shop.</li>
+      <li>Survive Big Wave phases for bonus points.</li>
+    </ul>
+    <div class="btns"><button class="btn" id="tutorial-close">GOT IT</button></div>
+  </div>
+</div>
+
+<div class="modal" id="shop-modal">
+  <div class="modal-card">
+    <h3>Surf Shop</h3>
+    <p id="shop-wallet">Coins: 0</p>
+    <div class="modal-grid" id="shop-grid"></div>
+    <div class="btns"><button class="btn btn-alt" id="shop-close">CLOSE</button></div>
+  </div>
+</div>
+
+<div class="modal" id="settings-modal">
+  <div class="modal-card">
+    <h3>Settings</h3>
+    <div id="settings-list"></div>
+    <div class="btns"><button class="btn btn-alt" id="settings-close">CLOSE</button></div>
+  </div>
+</div>
+
+<div class="modal" id="pause-modal">
+  <div class="modal-card">
+    <h3>Paused</h3>
+    <p>Take a breath before the next wave.</p>
+    <div class="btns">
+      <button class="btn" id="resume-btn">RESUME</button>
+      <button class="btn btn-alt" id="pause-restart-btn">RESTART</button>
+      <button class="btn btn-alt" id="pause-settings-btn">SETTINGS</button>
+      <button class="btn btn-alt" id="exit-menu-btn">EXIT TO MENU</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal" id="ach-modal">
+  <div class="modal-card">
+    <h3>Achievement Gallery</h3>
+    <p id="ach-summary">Unlocked 0/0</p>
+    <div class="ach-grid" id="ach-gallery"></div>
+    <div class="btns"><button class="btn btn-alt" id="ach-close">CLOSE</button></div>
+  </div>
+</div>
+
+
+<!-- ─────────────────── FINAL COMPLETE ARCADE ADD-ON ─────────────────── -->
+<button id="extras-btn" aria-label="Open extras">☰ EXTRA</button>
+<button id="photo-btn" aria-label="Toggle photo mode">📷 PHOTO</button>
+<div class="assist-badge">Assist ON</div>
+<div class="photo-badge">PHOTO MODE · tap 📷 again to exit</div>
+<div id="countdown" class="countdown-ov"><span>3</span></div>
+<div id="mobile-controls"><button class="touch-pad" id="pad-jump">JUMP</button><button class="touch-pad" id="pad-duck">DUCK</button></div>
+
+<div class="modal" id="complete-panel">
+  <div class="modal-card">
+    <h3>Complete Arcade Lab</h3>
+    <p>Final polish pack: stats, save tools, custom challenges, codex, sharing, accessibility and mobile controls.</p>
+    <div class="tabs" id="complete-tabs">
+      <button class="tab-btn active" data-tab="stats">Stats</button>
+      <button class="tab-btn" data-tab="challenge">Challenges</button>
+      <button class="tab-btn" data-tab="codex">Codex</button>
+      <button class="tab-btn" data-tab="save">Save</button>
+      <button class="tab-btn" data-tab="share">Share</button>
+    </div>
+    <div class="tab-page on" data-page="stats"><div id="stats-panel"></div></div>
+    <div class="tab-page" data-page="challenge"><div id="challenge-panel"></div></div>
+    <div class="tab-page" data-page="codex"><div id="codex-panel"></div></div>
+    <div class="tab-page" data-page="save"><div id="save-panel"></div></div>
+    <div class="tab-page" data-page="share"><div id="share-panel"></div></div>
+    <div class="btns"><button class="btn btn-alt" id="complete-close">CLOSE</button></div>
+  </div>
+</div>
+<script src="script.js"></script>
+</body>
+</html>
