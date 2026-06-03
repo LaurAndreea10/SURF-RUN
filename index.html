@@ -3,6 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#06101e">
+<meta name="description" content="SURF RUN – mobile-first arcade endless runner with modes, shop, boss waves, weather events and XP progression.">
 <title>🌊🏄🌊 SURF RUN</title>
 <link rel="stylesheet" href="style.css">
 </head>
@@ -16,11 +18,13 @@
 <div id="wet"></div>
 <div id="slowmo-ov"></div>
 <div id="flash"></div>
+<div id="zone-bar" aria-hidden="true"><div id="zone-fill"></div></div>
+<div id="combo-burst" aria-hidden="true"></div>
 
 <div id="hud">
-  <div class="hb"><span class="hl">Score</span><span class="hv" id="score-val">0</span></div>
+  <div class="hb"><span class="hl">Score</span><span class="hv" id="score-val" aria-live="polite">0</span></div>
   <div class="hb"><span class="hl">Multiplier</span><span class="hv" id="multi-val">×1</span></div>
-  <div class="hb"><span class="hl">Lives</span><span class="hv" id="lives-val">🤙🤙🤙</span></div>
+  <div class="hb hb-right"><span class="hl">Lives</span><span class="hv" id="lives-val">🤙🤙🤙</span><span class="hl best-label">Best</span><span class="hv best-hv" id="best-hud">0</span></div>
 </div>
 <div id="boost-hud"></div>
 <div id="mode-badge">MODE <strong id="mode-name">CLASSIC</strong></div>
@@ -56,7 +60,7 @@
     <div class="mini-panel"><div class="panel-title">Today Missions</div><div id="missions-panel"></div></div>
   </div>
   <div class="btns">
-    <button class="btn" id="start-btn">PADDLE OUT</button>
+    <button class="btn" id="start-btn">🏄 PADDLE OUT</button>
     <button class="btn btn-alt" id="daily-btn">📅 DAILY CHALLENGE</button>
     <button class="btn btn-alt" id="shop-btn">🪙 SHOP</button>
     <button class="btn btn-alt" id="settings-btn">⚙ SETTINGS</button>
